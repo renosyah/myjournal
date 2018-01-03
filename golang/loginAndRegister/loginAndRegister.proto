@@ -1,0 +1,38 @@
+syntax="proto3";
+
+package loginAndRegisterData;
+
+service loginAndRegisterDataService {
+	rpc Login(RequestLogin) returns (ResponseLogin);
+	rpc Register(RequestRegister) returns (ResponseRegister);
+}
+
+message RequestLogin {
+	string Username = 1;
+	string Password = 2;
+}
+
+message ResponseLogin {
+	string Iduser = 1;
+	bool Response = 2;
+}
+
+
+message RequestRegister {
+	RegisterUserData data = 1;
+}
+
+message ResponseRegister {
+	string Iduser = 1;
+	bool Response = 2;
+}
+
+message RegisterUserData {
+	string Id = 1;
+    string Nama = 2;
+    string Email = 3;
+    string NomorTelp = 4;
+    bytes UrlImage = 5;
+    string Username = 6;
+    string Password = 7;
+}

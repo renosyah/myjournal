@@ -1,0 +1,64 @@
+syntax="proto3";
+
+package synchronizationCatatanData;
+
+service synchronizationCatatanService {
+	rpc DataCatatan(RequestDataCatatan) returns (ResponseDataCatatan);
+	rpc UpdateDataCatatan(RequestUpdateDataCatatan) returns (ResponseUpdateDataCatatan);
+}
+
+//---------------------------------
+
+message RequestDataCatatan {
+	string IdUser = 1;
+}
+
+message ResponseDataCatatan {
+	ServerMyJournalData Data = 1;
+}
+
+message RequestUpdateDataCatatan{
+	ServerMyJournalData Data = 1;
+}
+
+message ResponseUpdateDataCatatan{
+	bool Ok = 1;
+}
+
+//---------------------------------
+
+message ServerMyJournalData {
+	ServerUserData userDataObj = 1;
+    repeated ServerCatatanData catatanObjs = 2;
+    ServerAppSettings appSettingObj = 3;
+}
+
+message ServerUserData {
+	string Id = 1;
+    string Nama = 2;
+    string Email = 3;
+    string NomorTelp = 4;
+    string UrlImage = 5;
+}
+
+message ServerCatatanData {
+	int32 KodeBulan = 1;
+    int32 Tahun = 2;
+    string Bulan = 3;
+    repeated ServerDetailCatatanData Detail = 4;
+}
+
+message ServerAppSettings{
+	string Lang = 1;
+    string StatusLoggin = 2;
+}
+
+
+message ServerDetailCatatanData {
+	string KodeCatatan = 1;
+    string Type = 2;
+    int32 Tanggal = 3;
+    string Catatan = 4;
+    int32 JumlahTotal = 5;
+	
+}
