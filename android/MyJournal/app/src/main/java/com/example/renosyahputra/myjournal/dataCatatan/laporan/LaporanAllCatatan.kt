@@ -6,55 +6,71 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
+import android.widget.LinearLayout
 import android.widget.ListView
+import android.widget.TextView
 import com.example.renosyahputra.myjournal.R
-import com.example.renosyahputra.myjournal.res.customAdapter.CustomAdapterDetailCatatan
+import com.example.renosyahputra.myjournal.dataCatatan.laporan.res.FunctionInLaporanFragment
 import com.example.renosyahputra.myjournal.res.objectData.CatatanData
-import com.example.renosyahputra.myjournal.res.objectData.DetailCatatanData
+
+class LaporanAllCatatan : Fragment(),View.OnClickListener{
 
 
-class LaporanAllCatatan : Fragment(),AdapterView.OnItemClickListener{
     lateinit var v : View
     lateinit var ctx : Context
+    lateinit var periodeSet : TextView
+    lateinit var saldoAwal : TextView
+    lateinit var saldoAkhir : TextView
     lateinit var list_catatan_listview : ListView
     lateinit var dataList : ArrayList<CatatanData>
+    lateinit var LayoitListLaporan : LinearLayout
 
-    public fun SetdataList(dataList : ArrayList<CatatanData>){
+    fun SetdataList(dataList : ArrayList<CatatanData>){
         this.dataList = dataList
     }
 
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        v = inflater!!.inflate(R.layout.listcatatan,container,false)
+        v = inflater!!.inflate(R.layout.laporan_periode,container,false)
         InitiationWidget(v)
         return v
     }
 
+
     private fun InitiationWidget(v : View){
         ctx = activity!!
-        list_catatan_listview = v.findViewById(R.id.list_catatan_listview) as ListView
 
-        val dataAdapter = ArrayList<DetailCatatanData>()
-        val yearAndMoons = ArrayList<CatatanData>()
+        periodeSet = v.findViewById(R.id.LaporanPeriodeSet) as TextView
+        saldoAwal = v.findViewById(R.id.saldoAwal) as TextView
+        saldoAkhir = v.findViewById(R.id.SaldoAkhir) as TextView
+        LayoitListLaporan = v.findViewById(R.id.layoutlistDetailLaporan)
+        list_catatan_listview = v.findViewById(R.id.listDetailLaporan) as ListView
 
-        for (data in dataList.sortedWith(compareBy(CatatanData::getTahun,CatatanData::getKodeBulan))) {
-            for (dataDetail in data.Detail) {
-                dataAdapter.add(dataDetail)
-                yearAndMoons.add(data)
-            }
-        }
+        periodeSet.setOnClickListener(this)
 
-        val adapter = CustomAdapterDetailCatatan(ctx,R.layout.custom_adapter_detail_catatan,dataAdapter)
-        adapter.setYearAndMoons(yearAndMoons)
-        adapter.setYearAndMoon("")
-        list_catatan_listview.adapter = adapter
-        list_catatan_listview.divider = null
-
-        list_catatan_listview.setOnItemClickListener(this)
+        DefaultLaporanByperiode()
     }
 
-    override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+    private fun ShowPeriode(){
+        val allPeriod = FunctionInLaporanFragment.GetAllPeriodeInGroup(dataList)
+        FunctionInLaporanFragment.ShowAllPeriod(ctx,allPeriod,dataList,list_catatan_listview,periodeSet,LayoitListLaporan,saldoAkhir)
+    }
 
+
+    private fun DefaultLaporanByperiode(){
+        val now = java.util.Calendar.getInstance()
+        val year = now.get(java.util.Calendar.YEAR)
+        FunctionInLaporanFragment.setListLaporanByPeriode(ctx,year,dataList,list_catatan_listview,LayoitListLaporan,saldoAkhir)
+        periodeSet.setText("Periode "+year.toString())
+        saldoAwal.setText("Saldo Awal Periode : 0")
+
+    }
+
+
+    override fun onClick(p0: View?) {
+        if (p0 == periodeSet){
+            ShowPeriode()
+        }
     }
 
 }

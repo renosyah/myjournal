@@ -1,6 +1,8 @@
 package com.example.renosyahputra.myjournal.res
 
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -21,7 +23,7 @@ class ListCatatan : Fragment(),AdapterView.OnItemClickListener {
     lateinit var list_catatan_listview : ListView
     lateinit var dataList : ArrayList<DetailCatatanData>
     lateinit var type : String
-
+    val dataAdapter = ArrayList<DetailCatatanData>()
     internal lateinit var YearAndMoon  : String
 
     fun setYearAndMoon(YearAndMoon  : String){
@@ -31,6 +33,7 @@ class ListCatatan : Fragment(),AdapterView.OnItemClickListener {
     public fun SetdataList(dataList : ArrayList<DetailCatatanData>){
         this.dataList = dataList
     }
+
 
     public fun SetCatatanType(type : String){
         this.type = type
@@ -45,8 +48,36 @@ class ListCatatan : Fragment(),AdapterView.OnItemClickListener {
     private fun InitiationWidget(v : View){
         ctx = activity!!
         list_catatan_listview = v.findViewById(R.id.list_catatan_listview)
+        SetListCatatanAdapter(ctx,dataList,dataAdapter,list_catatan_listview,type,YearAndMoon)
 
-        val dataAdapter = ArrayList<DetailCatatanData>()
+        list_catatan_listview.setOnItemClickListener(this)
+    }
+
+
+    override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+            if(dataAdapter.size >= 1){
+                var message = dataAdapter.get(p2).getType() + "\n" + dataAdapter.get(p2).getCatatan()
+                message = message + "\n" + dataAdapter.get(p2).getJumlahTotal()
+
+                AlertDialog.Builder(context)
+                        .setTitle("Detail Catatan")
+                        .setMessage(message)
+                        .setPositiveButton("Hapus", DialogInterface.OnClickListener { dialogInterface, i ->
+                            EditCatatan.DeleteDetailPosDetailCatatan(dataList,dataAdapter.get(p2))
+                            SetListCatatanAdapter(ctx,dataList,dataAdapter,list_catatan_listview,type,YearAndMoon)
+                        })
+                        .setNegativeButton("Edit", DialogInterface.OnClickListener { dialogInterface, i ->
+                            EditCatatan.EditDialogByDetailCatatanForListCatatan(ctx,dataList,dataAdapter.get(p2),dataAdapter,list_catatan_listview,type,YearAndMoon)
+                        })
+                        .create()
+                        .show()
+
+            }
+    }
+companion object {
+
+    fun SetListCatatanAdapter(ctx : Context, dataList: ArrayList<DetailCatatanData>, dataAdapter : ArrayList<DetailCatatanData>,list_catatan_listview : ListView,type: String,YearAndMoon: String){
+        dataAdapter.clear()
         for (data in dataList){
             if (data.getType() == type) {
                 dataAdapter.add(data)
@@ -59,11 +90,6 @@ class ListCatatan : Fragment(),AdapterView.OnItemClickListener {
         adapter.setYearAndMoons(ArrayList<CatatanData>())
         list_catatan_listview.adapter = adapter
         list_catatan_listview.divider = null
-
-        list_catatan_listview.setOnItemClickListener(this)
     }
-
-    override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-
-    }
+}
 }

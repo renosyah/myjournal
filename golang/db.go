@@ -16,6 +16,8 @@ func connect() *mgo.Session {
 	return session
 }
 
+
+
 func (dbjurnal *MyJournalData) GetAllMyJournalData(db *mgo.Session) ([]MyJournalData,error){
 	var collection = db.DB(dbName).C(MyJournalDataCollection)
 	var data []MyJournalData

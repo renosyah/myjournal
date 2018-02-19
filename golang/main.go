@@ -1,7 +1,7 @@
 package main
 
-import djurnal "github.com/renosyah/myjournal/synchronizationCatatan"
-import register "github.com/renosyah/myjournal/loginAndRegister"
+import djurnal "github.com/renosyah/myjournal/golang/synchronizationCatatan"
+import register "github.com/renosyah/myjournal/golang/loginAndRegister"
 import "golang.org/x/net/context"
 import "google.golang.org/grpc"
 import (

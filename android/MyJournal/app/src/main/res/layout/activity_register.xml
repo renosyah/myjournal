@@ -19,7 +19,7 @@
                 android:id="@+id/back_from_register"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                app:srcCompat="@android:drawable/ic_menu_revert" />
+                app:srcCompat="@drawable/back" />
 
             <TextView
                 android:id="@+id/textView4"
@@ -98,8 +98,7 @@
                         android:id="@+id/image_register_preview"
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
-                        android:visibility="gone"
-                        app:srcCompat="@drawable/ic_launcher_foreground" />
+                        android:visibility="gone" />
 
                     <Button
                         android:id="@+id/image_register"
