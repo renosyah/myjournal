@@ -53,16 +53,16 @@ class LaporanAllCatatan : Fragment(),View.OnClickListener{
 
     private fun ShowPeriode(){
         val allPeriod = FunctionInLaporanFragment.GetAllPeriodeInGroup(dataList)
-        FunctionInLaporanFragment.ShowAllPeriod(ctx,allPeriod,dataList,list_catatan_listview,periodeSet,LayoitListLaporan,saldoAkhir)
+        FunctionInLaporanFragment.ShowAllPeriod(ctx,allPeriod,dataList,list_catatan_listview,periodeSet,LayoitListLaporan,saldoAkhir,saldoAwal)
     }
 
 
     private fun DefaultLaporanByperiode(){
         val now = java.util.Calendar.getInstance()
         val year = now.get(java.util.Calendar.YEAR)
-        FunctionInLaporanFragment.setListLaporanByPeriode(ctx,year,dataList,list_catatan_listview,LayoitListLaporan,saldoAkhir)
+        FunctionInLaporanFragment.setListLaporanByPeriode(ctx,year,dataList,list_catatan_listview,LayoitListLaporan,saldoAkhir,saldoAwal)
         periodeSet.setText("Periode "+year.toString())
-        saldoAwal.setText("Saldo Awal Periode : 0")
+
 
     }
 

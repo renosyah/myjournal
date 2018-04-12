@@ -10,13 +10,18 @@ import android.view.View
 import android.widget.*
 import com.example.renosyahputra.myjournal.R
 import com.example.renosyahputra.myjournal.addCatatan.TypeCatatan
+import com.example.renosyahputra.myjournal.dataCatatan.laporan.res.FunctionInLaporanFragment
 import com.example.renosyahputra.myjournal.res.customAdapter.CustomAdapterLaporan
 import com.example.renosyahputra.myjournal.res.objectData.CatatanData
 import com.example.renosyahputra.myjournal.res.objectData.DetailCatatanData
+import java.text.DecimalFormat
 
 
 class EditCatatan {
+
     companion object {
+        val formatter = DecimalFormat("##,###")
+
         fun FindPositionCatatan(d : ArrayList<CatatanData>,KodeBulan : Int,KodeTahun : Int) : Int{
             var pos = 0
             for (i in 0..(d.size -1)){
@@ -135,7 +140,7 @@ class EditCatatan {
 
         }
 
-        fun EditDialogByDetailCatatanForAdapter(ctx : Context,d : ArrayList<DetailCatatanData>,c : DetailCatatanData,item : CatatanData,holder : CustomAdapterLaporan.Companion.DataList){
+        fun EditDialogByDetailCatatanForAdapter(ctx : Context,d : ArrayList<DetailCatatanData>,c : DetailCatatanData,item : CatatanData,holder : CustomAdapterLaporan.Companion.DataList,Total : TextView,catatanPeriodeSebelum : ArrayList<CatatanData>,UsingInAdapter : ArrayList<CatatanData>){
             val detailData = DetailCatatanData()
 
             val dialog = AlertDialogEditDetailCatatan(ctx,c)
@@ -163,6 +168,8 @@ class EditCatatan {
 
                 EditDetailByPosDetailCatatan(d,detailData)
                 CustomAdapterLaporan.SetAdapterListDetailLaporan(ctx,item,holder,d)
+
+                Total.setText("Saldo Akhir Periode : "+ formatter.format(FunctionInLaporanFragment.setTotalForPeriode(catatanPeriodeSebelum) + FunctionInLaporanFragment.setTotalForPeriode(UsingInAdapter)))
 
                 dialog.GetDialog().dismiss()
 

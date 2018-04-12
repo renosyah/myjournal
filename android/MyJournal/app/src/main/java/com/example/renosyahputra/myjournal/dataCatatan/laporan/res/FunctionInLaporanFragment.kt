@@ -31,7 +31,7 @@ companion object {
 
     }
 
-    fun ShowAllPeriod(ctx: Context, d: ArrayList<Int>, dataList: ArrayList<CatatanData>, list_laporan: ListView, t: TextView,LayoitListLaporan : LinearLayout,saldoak : TextView) {
+    fun ShowAllPeriod(ctx: Context, d: ArrayList<Int>, dataList: ArrayList<CatatanData>, list_laporan: ListView, t: TextView,LayoitListLaporan : LinearLayout,saldoak : TextView,saldoseb : TextView) {
         val dialog = AlertDialog.Builder(ctx).create()
         val inflater = (ctx as Activity).layoutInflater
         val v = inflater.inflate(R.layout.custom_alert_dialog_pilih_periode, null)
@@ -41,7 +41,7 @@ companion object {
         list.adapter = ArrayAdapter<Int>(ctx, android.R.layout.simple_dropdown_item_1line, d)
 
         list.setOnItemClickListener(AdapterView.OnItemClickListener { adapterView, view, i, l ->
-            setListLaporanByPeriode(ctx, d.get(i), dataList, list_laporan,LayoitListLaporan,saldoak)
+            setListLaporanByPeriode(ctx, d.get(i), dataList, list_laporan,LayoitListLaporan,saldoak,saldoseb)
             t.setText("Periode " + d.get(i).toString())
             dialog.dismiss()
         })
@@ -53,17 +53,23 @@ companion object {
         dialog.show()
     }
 
-    fun setListLaporanByPeriode(ctx: Context, periode: Int, catatan: ArrayList<CatatanData>, list_laporan: ListView,LayoitListLaporan : LinearLayout,saldoak : TextView) {
+    fun setListLaporanByPeriode(ctx: Context, periode: Int, catatan: ArrayList<CatatanData>, list_laporan: ListView,LayoitListLaporan : LinearLayout,saldoak : TextView,saldoseb : TextView) {
         val newCatatanData = ArrayList<CatatanData>()
+        val catatanPeriodeSebelum = ArrayList<CatatanData>()
         for (d in catatan.sortedWith(compareBy(CatatanData::getKodeBulan))) {
             if (d.getTahun() == periode) {
                 newCatatanData.add(d)
             }
+            if (d.getTahun() == (periode - 1)){
+                catatanPeriodeSebelum.add(d)
+            }
         }
-        saldoak.setText("Saldo Akhir Periode : "+formatter.format(setTotalForPeriode(newCatatanData)))
+        saldoak.setText("Saldo Akhir Periode : "+formatter.format(setTotalForPeriode(catatanPeriodeSebelum) + setTotalForPeriode(newCatatanData)))
+        saldoseb.setText("Saldo Awal Periode : "+formatter.format(setTotalForPeriode(catatanPeriodeSebelum)))
+
         val adapter = CustomAdapterLaporan(ctx, R.layout.custom_adapter_laporan, newCatatanData)
         adapter.setOriginalCatatan(catatan)
-        adapter.setUsingInAdapter(newCatatanData)
+        adapter.setUsingInAdapter(newCatatanData,catatanPeriodeSebelum)
         adapter.setTotal(saldoak)
         list_laporan.adapter = adapter
         LayoitListLaporan.layoutParams.height = FunctionInLaporanFragment.getListViewTotalHeight(list_laporan) + 100

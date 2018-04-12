@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ListView
+import android.widget.TextView
 import com.example.renosyahputra.myjournal.R
 import com.example.renosyahputra.myjournal.res.customAdapter.CustomAdapterDetailCatatan
 import com.example.renosyahputra.myjournal.res.objectData.CatatanData
@@ -21,6 +22,7 @@ class ListCatatan : Fragment(),AdapterView.OnItemClickListener {
     lateinit var v : View
     lateinit var ctx : Context
     lateinit var list_catatan_listview : ListView
+    lateinit var TextListEmpty : TextView
     lateinit var dataList : ArrayList<DetailCatatanData>
     lateinit var type : String
     val dataAdapter = ArrayList<DetailCatatanData>()
@@ -48,7 +50,12 @@ class ListCatatan : Fragment(),AdapterView.OnItemClickListener {
     private fun InitiationWidget(v : View){
         ctx = activity!!
         list_catatan_listview = v.findViewById(R.id.list_catatan_listview)
+        TextListEmpty = v.findViewById(R.id.TextListEmpty)
+
         SetListCatatanAdapter(ctx,dataList,dataAdapter,list_catatan_listview,type,YearAndMoon)
+
+
+
 
         list_catatan_listview.setOnItemClickListener(this)
     }
@@ -65,6 +72,7 @@ class ListCatatan : Fragment(),AdapterView.OnItemClickListener {
                         .setPositiveButton("Hapus", DialogInterface.OnClickListener { dialogInterface, i ->
                             EditCatatan.DeleteDetailPosDetailCatatan(dataList,dataAdapter.get(p2))
                             SetListCatatanAdapter(ctx,dataList,dataAdapter,list_catatan_listview,type,YearAndMoon)
+
                         })
                         .setNegativeButton("Edit", DialogInterface.OnClickListener { dialogInterface, i ->
                             EditCatatan.EditDialogByDetailCatatanForListCatatan(ctx,dataList,dataAdapter.get(p2),dataAdapter,list_catatan_listview,type,YearAndMoon)
@@ -78,6 +86,7 @@ companion object {
 
     fun SetListCatatanAdapter(ctx : Context, dataList: ArrayList<DetailCatatanData>, dataAdapter : ArrayList<DetailCatatanData>,list_catatan_listview : ListView,type: String,YearAndMoon: String){
         dataAdapter.clear()
+
         for (data in dataList){
             if (data.getType() == type) {
                 dataAdapter.add(data)

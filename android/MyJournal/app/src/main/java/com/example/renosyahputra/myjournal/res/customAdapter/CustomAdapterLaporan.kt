@@ -21,6 +21,7 @@ class CustomAdapterLaporan(context: Context, resource: Int, objects: MutableList
     internal var objects: MutableList<CatatanData> = objects
     internal lateinit var OriginalCatatan: ArrayList<CatatanData>
     internal lateinit var UsingInAdapter: ArrayList<CatatanData>
+    internal lateinit var catatanPeriodeSebelum: ArrayList<CatatanData>
     internal lateinit var Total : TextView
     val formatter = DecimalFormat("##,###")
 
@@ -31,8 +32,9 @@ class CustomAdapterLaporan(context: Context, resource: Int, objects: MutableList
     fun setTotal(Total : TextView){
         this.Total = Total
     }
-    fun setUsingInAdapter(UsingInAdapter: ArrayList<CatatanData>){
+    fun setUsingInAdapter(UsingInAdapter: ArrayList<CatatanData>,catatanPeriodeSebelum: ArrayList<CatatanData>){
         this.UsingInAdapter = UsingInAdapter
+        this.catatanPeriodeSebelum = catatanPeriodeSebelum
     }
 
 
@@ -66,7 +68,7 @@ class CustomAdapterLaporan(context: Context, resource: Int, objects: MutableList
 
             val dataAdapter = newDetail.get(i)
             var message = dataAdapter.getType() + "\n" + dataAdapter.getCatatan()
-            message = message + "\n" + dataAdapter.getJumlahTotal()
+            message = message + "\n" + formatter.format(dataAdapter.getJumlahTotal())
 
             AlertDialog.Builder(context)
                     .setTitle("Detail Catatan")
@@ -74,12 +76,11 @@ class CustomAdapterLaporan(context: Context, resource: Int, objects: MutableList
                     .setPositiveButton("Hapus", DialogInterface.OnClickListener { dialogInterface, posd ->
                         EditCatatan.DeleteDetailPosDetailCatatan(item.GetDetail(),newDetail.get(i))
                         SetAdapterListDetailLaporan(context,item, holder,newDetail)
-                        Total.setText("Saldo Akhir Periode : "+ formatter.format(FunctionInLaporanFragment.setTotalForPeriode(UsingInAdapter)))
+                        Total.setText("Saldo Akhir Periode : "+ formatter.format(FunctionInLaporanFragment.setTotalForPeriode(catatanPeriodeSebelum) + FunctionInLaporanFragment.setTotalForPeriode(UsingInAdapter)))
 
                     })
                     .setNegativeButton("Edit", DialogInterface.OnClickListener { dialogInterface, posd ->
-                        EditCatatan.EditDialogByDetailCatatanForAdapter(context, newDetail, dataAdapter,item,holder)
-                        Total.setText("Saldo Akhir Periode : "+ formatter.format(FunctionInLaporanFragment.setTotalForPeriode(UsingInAdapter)))
+                        EditCatatan.EditDialogByDetailCatatanForAdapter(context, newDetail, dataAdapter,item,holder,Total,catatanPeriodeSebelum,UsingInAdapter)
 
                     })
                     .create()

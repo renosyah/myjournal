@@ -7,6 +7,16 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
 
+        <TextView
+            android:id="@+id/TextListEmpty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:text="Catatan Kosong"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:visibility="gone" />
+
         <ListView
             android:id="@+id/list_catatan_listview"
             android:layout_width="match_parent"

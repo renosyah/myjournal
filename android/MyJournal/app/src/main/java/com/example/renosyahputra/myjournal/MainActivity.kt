@@ -179,8 +179,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main, menu)
-        val setting = menu.findItem(R.id.action_settings)
-        setting.setTitle("Setting")
 
         val exit = menu.findItem(R.id.exit)
         exit.setTitle("Exit")
@@ -189,10 +187,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_settings ->{
-
-                return true
-            }
             R.id.exit -> {
                 System.exit(0)
                 return true
